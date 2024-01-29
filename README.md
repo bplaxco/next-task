@@ -1,18 +1,42 @@
 # next-task
 
-Pick a next task to do
+This project is meant to experiment with pulling together tasks from multiple
+sources and selecting which one work on next automatically. The project is just
+for fun and for self use so it may be a little hacky in some spots.
 
-This is an experiment with pulling together todo lists from multiple sources.
-I expect the project to be a little hacky.
+This will require a prioritized backlog of tasks that each range from 15 minutes
+to 3 hours. The tool will load a block of the top 20 tasks and pick one at random
+to work on until that block is complete.
 
-This isn't really aimed at other people using it at this moment, but I'm adding it
-here for the sake of making it easy for me to clone it on different systems and
-in case any of the code is useful to someone.
+The size of the tasks and randomness is part of the experiment. I
+want to see if small tasks in no particular order can help ensure more projects
+are worked on in parallel so that a larger project doesn't end up stalling
+other ones out.
+
+The reason a chunk of tasks are chosen from a prioritized list is also to make sure
+that things aren't too random and the important work is still being worked on.
+
+**Why 20?**
+
+15m * 20 = 5h which is an average working day sans meetings, ad-hoc requests,
+and other time bound items. And if I ever wanted do implement this on paper, I
+could do it with a d20 die.
+
+## Status
+
+Just getting started on it. Not battle tested at all yet.
 
 ## Supported Sources
 
-### Google: gmail and tasks
+### Google Tasks and Gmail
 
-This requires a google project set up to generate the `~/.config/next-task/google/credentials.json`,
-and the project should have read access to tasks and gmail. The quickstarts for both of these
+This tool requires a Google project set up to generate the
+`~/.config/next-task/google/credentials.json` file, and the project should have
+read access to Google Tasks and Gmail. The quickstarts for both of these
 services should provide enough access.
+
+## Planned Sources
+
+### Jira
+
+A token and JQL statement to select which tasks are in scope will be needed
