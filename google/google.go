@@ -46,7 +46,7 @@ func tasksFromGmail(ctx context.Context) []*tasks.Task {
 		m, err = svc.Users.Messages.Get(user, m.Id).Do()
 
 		if err != nil {
-			log.Fatalf("Unable to retrieve labels: %v", err)
+			log.Fatalf("Unable to retrieve message: %v", err)
 		}
 
 		for _, h := range m.Payload.Headers {
@@ -71,7 +71,7 @@ func tasksFromTasks(ctx context.Context) []*tasks.Task {
 
 	svc, err := googletasks.NewService(ctx, option.WithHTTPClient(getClient(ctx)))
 	if err != nil {
-		log.Fatalf("unable to retrieve tasks client %v", err)
+		log.Fatalf("unable to retrieve Tasks client %v", err)
 	}
 
 	taskLists, err := svc.Tasklists.List().Do()
