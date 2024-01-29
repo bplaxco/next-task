@@ -21,7 +21,7 @@ func randomTask() *tasks.Task {
 	task, err := tasks.RandomTask()
 
 	if err != nil {
-		log.Fatalf("tasks.RandomTask: %s", err.Error())
+		log.Fatalf("tasks.RandomTask: %v", err)
 	}
 
 	return task
