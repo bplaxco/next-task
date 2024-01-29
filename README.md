@@ -22,6 +22,14 @@ that things aren't too random and the important work is still being worked on.
 and other time bound items. And if I ever wanted do implement this on paper, I
 could do it with a d20 die.
 
+## Completing Tasks
+
+This doesn't edit the source where it gets the task. You still have to mark the
+task complete when you're done. This is intentional so that you can get your
+next task recommendation and start working on it but if you're unable to
+complete it in the time window you can come back to it again when it gets
+randomly pulled in the next round.
+
 ## Status
 
 Just getting started on it. Not battle tested at all yet.
@@ -40,3 +48,11 @@ services should provide enough access.
 ### Jira
 
 A token and JQL statement to select which tasks are in scope will be needed
+
+## Resetting the cache
+
+To remove the task cache run:
+
+```sh
+rm -rf ~/.cache/next-task/tasks
+```

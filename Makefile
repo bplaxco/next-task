@@ -11,3 +11,6 @@ build:
 
 clean:
 	git clean -fdX
+
+install:
+	go install .

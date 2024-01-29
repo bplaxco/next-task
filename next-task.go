@@ -12,7 +12,13 @@ import (
 func randomTask() *tasks.Task {
 	if tasks.CachedTaskCount() == 0 {
 		ctx := context.Background()
-
+		// The order of things pulled here will mater given
+		// the capacity system. In the future it might make
+		// sense to pull max capacity of each list and shuffle
+		// the full list of tasks and then only cache
+		// up to the total capacity. It wastes network
+		// calls but ensures we're pulling from each
+		// source fairly evenly
 		for _, task := range google.FetchTasks(ctx) {
 			task.Cache()
 		}

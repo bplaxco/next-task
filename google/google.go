@@ -22,6 +22,9 @@ import (
 func FetchTasks(ctx context.Context) []*tasks.Task {
 	var fetchedTasks []*tasks.Task
 
+	// The order here matters given that these burn through
+	// capacity. Email should be top since those items can be
+	// turned into other tasks if not dealt with quickly.
 	fetchedTasks = append(fetchedTasks, tasksFromGmail(ctx)...)
 	fetchedTasks = append(fetchedTasks, tasksFromTasks(ctx)...)
 
@@ -37,12 +40,17 @@ func tasksFromGmail(ctx context.Context) []*tasks.Task {
 		log.Fatalf("unable to retrieve Gmail client: %v", err)
 	}
 
-	messagesList, err := svc.Users.Messages.List(user).Do()
+	messagesList, err := svc.Users.Messages.List(user).MaxResults(tasks.Capacity()).Do()
 	if err != nil {
 		log.Fatalf("unable to retrieve messages: %v", err)
 	}
 
 	for _, m := range messagesList.Messages {
+		if tasks.Capacity() == 0 {
+			log.Println("skipping Gmail messages because capacity has been reached")
+			break
+		}
+
 		m, err = svc.Users.Messages.Get(user, m.Id).Do()
 
 		if err != nil {
@@ -58,6 +66,7 @@ func tasksFromGmail(ctx context.Context) []*tasks.Task {
 				}
 
 				fetchedTasks = append(fetchedTasks, tasks.NewTask("GoogleMail", m.Id, title, m.Snippet))
+				tasks.DecrementCapacity()
 				break
 			}
 		}
@@ -80,7 +89,12 @@ func tasksFromTasks(ctx context.Context) []*tasks.Task {
 	}
 
 	for _, taskList := range taskLists.Items {
-		tasksList, err := svc.Tasks.List(taskList.Id).ShowCompleted(false).ShowDeleted(false).Do()
+		if tasks.Capacity() == 0 {
+			log.Println("skipping Google Tasks because capacity has been reached")
+			break
+		}
+
+		tasksList, err := svc.Tasks.List(taskList.Id).MaxResults(tasks.Capacity()).ShowCompleted(false).ShowDeleted(false).Do()
 
 		if err != nil {
 			log.Fatalf("unable to retrieve tasks list. %v", err)
@@ -92,6 +106,7 @@ func tasksFromTasks(ctx context.Context) []*tasks.Task {
 			}
 
 			fetchedTasks = append(fetchedTasks, tasks.NewTask("GoogleTask", task.Id, task.Title, ""))
+			tasks.DecrementCapacity()
 		}
 	}
 

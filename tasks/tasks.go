@@ -10,7 +10,10 @@ import (
 	"path/filepath"
 )
 
-var taskCacheDir string
+const MaxTaskCapacity int64 = 20
+
+var taskCacheDirPath string
+var taskCapacityRemaining int64 = MaxTaskCapacity
 
 type Task struct {
 	Kind        string `json:"kind"`
@@ -61,15 +64,15 @@ func (t *Task) ClearCache() error {
 }
 
 func TaskCacheDir() string {
-	if len(taskCacheDir) == 0 {
-		taskCacheDir = filepath.Join(os.Getenv("HOME"), ".cache/next-task/tasks")
+	if len(taskCacheDirPath) == 0 {
+		taskCacheDirPath = filepath.Join(os.Getenv("HOME"), ".cache/next-task/tasks")
 
-		if _, err := os.Stat(taskCacheDir); err != nil {
-			os.MkdirAll(taskCacheDir, 0700)
+		if _, err := os.Stat(taskCacheDirPath); err != nil {
+			os.MkdirAll(taskCacheDirPath, 0700)
 		}
 	}
 
-	return taskCacheDir
+	return taskCacheDirPath
 }
 
 func CachedTaskCount() int {
@@ -135,4 +138,20 @@ func cachedTaskPaths() ([]string, error) {
 	}
 
 	return paths, err
+}
+
+func Capacity() int64 {
+	return taskCapacityRemaining
+}
+
+func DecrementCapacity() {
+	if taskCapacityRemaining > 0 {
+		taskCapacityRemaining--
+	}
+}
+
+func IncrementCapacity() {
+	if taskCapacityRemaining < MaxTaskCapacity {
+		taskCapacityRemaining++
+	}
 }
