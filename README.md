@@ -49,6 +49,11 @@ services should provide enough access.
 
 A token and JQL statement to select which tasks are in scope will be needed
 
+### Slack (Maybe)
+
+If all of the above end up being useful for me, I may round this out with the ability
+to connect to slack for pulling things from the save for later feature.
+
 ## Resetting the cache
 
 To remove the task cache run:
