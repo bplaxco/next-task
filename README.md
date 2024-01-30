@@ -43,11 +43,19 @@ This tool requires a Google project set up to generate the
 read access to Google Tasks and Gmail. The quickstarts for both of these
 services should provide enough access.
 
-## Planned Sources
+If the credentials.json file isn't present then these sources won't be
+enabled.
 
 ### Jira
 
-A token and JQL statement to select which tasks are in scope will be needed
+This pulls issues from Jira to use. The following settings need to be set
+to fetch tasks from Jira:
+
+- `NEXT_TASK_JIRA_INSTANCE_URL`: The instance to connect to
+- `NEXT_TASK_JIRA_ACCESS_TOKEN`: The personal access token to make requests with
+- `NEXT_TASK_JIRA_TASK_JQL`: Return the set of tasks that should be in scope
+
+## Planned Sources
 
 ### Slack (Maybe)
 
