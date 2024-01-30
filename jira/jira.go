@@ -21,7 +21,7 @@ func FetchTasks(cfg *config.Jira) []*tasks.Task {
 			break
 		}
 
-		fetchedTasks = append(fetchedTasks, tasks.NewTask("Jira", issue.Key, issue.Fields.Summary, issue.Fields.Description))
+		fetchedTasks = append(fetchedTasks, tasks.NewTask("Jira", issue.Key, issue.Key, issue.Fields.Summary))
 		tasks.DecrementCapacity()
 	}
 
