@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	googlemail "google.golang.org/api/gmail/v1"
 	"google.golang.org/api/option"
@@ -89,7 +90,8 @@ func tasksFromTasks(ctx context.Context, cfg *config.Google) []*tasks.Task {
 			break
 		}
 
-		tasksList, err := svc.Tasks.List(taskList.Id).MaxResults(tasks.Capacity()).DueMax("1970-01-01T00:00:00Z").ShowCompleted(false).ShowDeleted(false).Do()
+		tomorrow := time.Now().Add(24 * time.Hour).Format(time.RFC3339)
+		tasksList, err := svc.Tasks.List(taskList.Id).MaxResults(tasks.Capacity()).DueMax(tomorrow).ShowCompleted(false).ShowDeleted(false).Do()
 
 		if err != nil {
 			log.Fatalf("unable to retrieve tasks list. %v", err)
