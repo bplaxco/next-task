@@ -89,7 +89,7 @@ func tasksFromTasks(ctx context.Context, cfg *config.Google) []*tasks.Task {
 			break
 		}
 
-		tasksList, err := svc.Tasks.List(taskList.Id).MaxResults(tasks.Capacity()).ShowCompleted(false).ShowDeleted(false).Do()
+		tasksList, err := svc.Tasks.List(taskList.Id).MaxResults(tasks.Capacity()).DueMax("1970-01-01T00:00:00Z").ShowCompleted(false).ShowDeleted(false).Do()
 
 		if err != nil {
 			log.Fatalf("unable to retrieve tasks list. %v", err)
