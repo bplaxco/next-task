@@ -35,7 +35,7 @@ func tasksFromGmail(ctx context.Context, cfg *config.Google) []*tasks.Task {
 		log.Fatalf("unable to retrieve Gmail client: %v", err)
 	}
 
-	messagesList, err := svc.Users.Messages.List(user).MaxResults(tasks.Capacity()).Do()
+	messagesList, err := svc.Users.Messages.List(user).LabelIds("INBOX").MaxResults(tasks.Capacity()).Do()
 	if err != nil {
 		log.Fatalf("unable to retrieve messages: %v", err)
 	}
