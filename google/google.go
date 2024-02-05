@@ -81,20 +81,34 @@ func tasksFromTasks(ctx context.Context, cfg *config.Google) []*tasks.Task {
 		log.Fatalf("unable to retrieve task lists. %v", err)
 	}
 
+	tomorrow := time.Now().Add(24 * time.Hour)
+
 	for _, taskList := range taskLists.Items {
 		if tasks.Capacity() == 0 {
 			log.Println("skipping Google Tasks because capacity has been reached")
 			break
 		}
 
-		tomorrow := time.Now().Add(24 * time.Hour).Format(time.RFC3339)
-		tasksList, err := svc.Tasks.List(taskList.Id).MaxResults(tasks.Capacity()).DueMax(tomorrow).ShowCompleted(false).ShowDeleted(false).Do()
+		tasksList, err := svc.Tasks.List(taskList.Id).MaxResults(tasks.Capacity()).ShowCompleted(false).ShowDeleted(false).Do()
 
 		if err != nil {
 			log.Fatalf("unable to retrieve tasks list. %v", err)
 		}
 
 		for _, task := range tasksList.Items {
+			if len(task.Due) > 0 {
+				due, err := time.Parse(time.RFC3339, task.Due)
+
+				if err != nil {
+					log.Printf("could not parse task due date: %s\n", task.Title)
+					continue
+				}
+
+				if due.After(tomorrow) {
+					continue
+				}
+			}
+
 			if tasks.TaskAlreadyExists(fetchedTasks, task.Title) {
 				continue
 			}
