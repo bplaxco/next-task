@@ -2,7 +2,6 @@ package google
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -55,13 +54,11 @@ func tasksFromGmail(ctx context.Context, cfg *config.Google) []*tasks.Task {
 
 		for _, h := range m.Payload.Headers {
 			if h.Name == "Subject" {
-				title := fmt.Sprintf("Process: %s", h.Value)
-
-				if tasks.TaskAlreadyExists(fetchedTasks, title) {
+				if tasks.TaskAlreadyExists(fetchedTasks, h.Value) {
 					break
 				}
 
-				fetchedTasks = append(fetchedTasks, tasks.NewTask("GoogleMail", m.Id, title, m.Snippet))
+				fetchedTasks = append(fetchedTasks, tasks.NewTask("GoogleMail", m.Id, h.Value, m.Snippet))
 				tasks.DecrementCapacity()
 				break
 			}
