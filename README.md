@@ -69,3 +69,12 @@ To remove the task cache run:
 ```sh
 rm -rf ~/.cache/next-task/tasks
 ```
+
+## Misc Ideas
+
+- Weighted Randomness: While pure randomness may feel fair, assigning slightly
+  higher probabilities to the top-priority tasks ensures the most important
+  items still get more attention overall.
+
+- Categorization: Consider creating separate queues for different categories of
+  tasks (e.g., urgent, deep-focus work, quick wins).
